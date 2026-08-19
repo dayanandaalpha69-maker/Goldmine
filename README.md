@@ -1,13 +1,13 @@
 # Goldmine
 
-Goldmine is a lightweight terminal-based AI chat application built using Python, LangChain, and Groq. It loads the API key from a local `.env` file, initializes a chat model, and allows users to ask questions interactively from the command line.
+Goldmine is a lightweight terminal-based AI chat application built using Python and Gemini. It loads the API key from a local `.env` file and allows users to ask questions interactively from the command line.
 
-Note: The `llama-3.1-8b-instant` model has been decommissioned. This project now uses a configurable replacement model; by default it attempts to use `gpt-oss-20b`. If you do not have access to that model, set `GROQ_MODEL` in your `.env` to a model available to your account.
+Gemini is the default provider. Groq remains available by setting `PROVIDER=groq`.
 
 ## Features
 - Terminal-based conversational AI
 - LangChain integration
-- Groq-powered language model
+- Gemini-powered language model
 - Reads configuration from `.env`
 - Interactive chat loop
 - Secure secret handling using `.gitignore`
@@ -15,7 +15,8 @@ Note: The `llama-3.1-8b-instant` model has been decommissioned. This project now
 ## Tech Stack
 - Python
 - LangChain
-- Groq
+- Google Gemini
+- Groq (optional)
 - VS Code
 - GitHub
 
@@ -28,25 +29,25 @@ Note: The `llama-3.1-8b-instant` model has been decommissioned. This project now
 ## Prerequisites
 Before you run the app, make sure you have:
 - Python 3.10 or newer
-- A valid Groq API key
+- A valid Gemini API key
 - A project virtual environment configured
 
 ## Installation
 1. Open the project folder in VS Code
 2. Create and activate a virtual environment
-3. Install the required dependency:
+3. Install the required dependencies:
 
 ```bash
-pip install langchain-groq
+pip install -r requirements.txt
 ```
 
 4. Create a `.env` file in the project root
-5. Add your Groq key:
+5. Add your Gemini key:
 
 ```env
-GROQ_API_KEY=your_api_key_here
-# Optional: override the default model
-GROQ_MODEL=gpt-oss-20b
+PROVIDER=gemini
+GEMINI_API_KEY=your_api_key_here
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
 ## Run the App
@@ -92,7 +93,7 @@ __pycache__/
 https://github.com/dayanandaalpha69-maker/Goldmine.git
 
 ## Notes
-This project was built and verified as a working AI chat application using Groq. It is intended for learning, experimentation, and quick chatbot development in a local environment.
+This project is intended for learning, experimentation, and quick chatbot development in a local environment.
 
 ---
 
@@ -106,10 +107,13 @@ echo "What is the capital of India?" | python app.py
 Override model selection in `.env`:
 
 ```env
-# Preferred model
-GROQ_MODEL=gpt-4o
-# Comma-separated fallbacks
-GROQ_FALLBACK_MODELS=gpt-oss-20b,gpt-4o
+# Gemini configuration
+PROVIDER=gemini
+GEMINI_MODEL=gemini-3.6-flash
+
+# Optional Groq mode
+# PROVIDER=groq
+# GROQ_MODEL=openai/gpt-oss-20b
 ```
 
 ## Badges
