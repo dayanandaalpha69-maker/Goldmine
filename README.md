@@ -93,3 +93,40 @@ https://github.com/dayanandaalpha69-maker/Goldmine.git
 
 ## Notes
 This project was built and verified as a working AI chat application using Groq. It is intended for learning, experimentation, and quick chatbot development in a local environment.
+
+---
+
+## Examples
+Run a quick question from the command line (non-interactive):
+
+```bash
+echo "What is the capital of India?" | python app.py
+```
+
+Override model selection in `.env`:
+
+```env
+# Preferred model
+GROQ_MODEL=gpt-4o
+# Comma-separated fallbacks
+GROQ_FALLBACK_MODELS=gpt-oss-20b,gpt-4o
+```
+
+## Badges
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-SEE_REPO-lightgrey)
+
+## Development
+Create and activate the virtual environment and install dependencies:
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Run tests:
+
+```bash
+python -m unittest test_app.py
+```
