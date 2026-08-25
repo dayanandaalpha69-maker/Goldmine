@@ -1,5 +1,16 @@
+import os
+
 import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+
+
+def load_streamlit_secrets() -> None:
+    for key in ("PROVIDER", "GEMINI_API_KEY", "GEMINI_MODEL", "GROQ_API_KEY", "GROQ_MODEL"):
+        if key in st.secrets:
+            os.environ[key] = str(st.secrets[key])
+
+
+load_streamlit_secrets()
 
 from app import (
     SUMMARY_MESSAGE_INTERVAL,

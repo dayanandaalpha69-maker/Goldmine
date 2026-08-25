@@ -60,6 +60,14 @@ streamlit run streamlit_app.py
 
 Streamlit will print a local URL, usually `http://localhost:8501`.
 
+For Streamlit Community Cloud, add the following under **App settings > Secrets**:
+
+```toml
+PROVIDER = "gemini"
+GEMINI_API_KEY = "your_api_key_here"
+GEMINI_MODEL = "gemini-3.6-flash"
+```
+
 For the terminal version:
 
 ```bash
