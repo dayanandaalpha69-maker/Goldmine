@@ -79,7 +79,7 @@ st.markdown(
     <div class="hero">
         <div class="eyebrow">Goldmine / conversational AI</div>
         <h1>Ask better questions.</h1>
-        <p>A focused chat workspace with compact memory and automatic summaries.</p>
+        <p>Atom Consultancy Services.</p>
     </div>
     """,
     unsafe_allow_html=True,
