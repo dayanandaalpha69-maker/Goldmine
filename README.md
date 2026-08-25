@@ -1,6 +1,6 @@
 # Goldmine
 
-Goldmine is a lightweight terminal-based AI chat application built using Python and Gemini. It loads the API key from a local `.env` file and allows users to ask questions interactively from the command line.
+Goldmine is a lightweight AI chat application built using Python, Gemini, and Streamlit. It loads the API key from a local `.env` file and offers both a browser UI and terminal chat.
 
 Gemini is the default provider. Groq remains available by setting `PROVIDER=groq`.
 
@@ -51,6 +51,16 @@ GEMINI_MODEL=gemini-3.6-flash
 ```
 
 ## Run the App
+
+Launch the browser chat UI:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Streamlit will print a local URL, usually `http://localhost:8501`.
+
+For the terminal version:
 
 ```bash
 python app.py

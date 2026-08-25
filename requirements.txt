@@ -1,4 +1,6 @@
 google-genai
+langchain-core
 langchain-groq
 groq
 python-dotenv
+streamlit
