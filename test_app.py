@@ -20,7 +20,7 @@ class AppConfigTests(unittest.TestCase):
             spec.loader.exec_module(module)
             self.assertEqual(module.provider, "gemini")
             client, model_name = module.create_model()
-            self.assertEqual(model_name, "gemini-3.6-flash")
+            self.assertEqual(model_name, "gemini-3.8-flash")
             self.assertIsNotNone(client)
         finally:
             if original_provider is not None:
@@ -56,19 +56,61 @@ class ConversationTests(unittest.TestCase):
         self.assertEqual(trimmed[0].content, "system")
         self.assertIn("message 9", trimmed[-1].content)
 
+    def test_gemini_ask_uses_interactions_api_with_stateless_history(self):
+        module = self.load_app()
+        original_provider = module.provider
+        module.provider = "gemini"
+
+        class FakeClient:
+            class Interactions:
+                request = None
+
+                @classmethod
+                def create(cls, **request):
+                    cls.request = request
+
+                    class Response:
+                        output_text = "reply"
+
+                    return Response()
+
+            interactions = Interactions()
+
+        client = FakeClient()
+        messages = [
+            SystemMessage(content="system prompt"),
+            HumanMessage(content="question"),
+            AIMessage(content="answer"),
+            HumanMessage(content="follow-up"),
+        ]
+
+        try:
+            result = module.ask(client, "gemini-3.8-flash", messages)
+        finally:
+            module.provider = original_provider
+
+        self.assertEqual(result, "reply")
+        self.assertEqual(client.interactions.request["model"], "gemini-3.8-flash")
+        self.assertEqual(client.interactions.request["system_instruction"], "system prompt")
+        self.assertFalse(client.interactions.request["store"])
+        self.assertEqual(
+            [step["type"] for step in client.interactions.request["input"]],
+            ["user_input", "model_output", "user_input"],
+        )
+
     def test_summarize_messages_preserves_summary_and_recent_context(self):
         module = self.load_app()
 
         class FakeClient:
-            class Models:
+            class Interactions:
                 @staticmethod
-                def generate_content(model, contents):
+                def create(**request):
                     class Response:
-                        text = "facts from the conversation"
+                        output_text = "facts from the conversation"
 
                     return Response()
 
-            models = Models()
+            interactions = Interactions()
 
         messages = [SystemMessage(content="system")]
         for index in range(5):

@@ -47,7 +47,7 @@ pip install -r requirements.txt
 ```env
 PROVIDER=gemini
 GEMINI_API_KEY=your_api_key_here
-GEMINI_MODEL=gemini-3.6-flash
+GEMINI_MODEL=gemini-3.8-flash
 ```
 
 ## Run the App
@@ -65,7 +65,7 @@ For Streamlit Community Cloud, add the following under **App settings > Secrets*
 ```toml
 PROVIDER = "gemini"
 GEMINI_API_KEY = "your_api_key_here"
-GEMINI_MODEL = "gemini-3.6-flash"
+GEMINI_MODEL = "gemini-3.8-flash"
 ```
 
 For the terminal version:
@@ -127,7 +127,7 @@ Override model selection in `.env`:
 ```env
 # Gemini configuration
 PROVIDER=gemini
-GEMINI_MODEL=gemini-3.6-flash
+GEMINI_MODEL=gemini-3.8-flash
 
 # Optional Groq mode
 # PROVIDER=groq

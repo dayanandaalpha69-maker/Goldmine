@@ -34,7 +34,7 @@ def create_model():
 
         from google import genai
 
-        model_name = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
         return genai.Client(api_key=api_key), model_name
 
     if provider == "groq":
@@ -49,12 +49,21 @@ def create_model():
 
     raise RuntimeError("Unsupported PROVIDER. Use 'gemini' or 'groq'.")
 
-def _gemini_contents(messages: list[BaseMessage]) -> list[dict[str, object]]:
-    contents = []
+def _gemini_interaction_input(messages: list[BaseMessage]) -> tuple[str, list[dict[str, object]]]:
+    system_instruction = next(
+        (str(message.content) for message in messages if isinstance(message, SystemMessage)),
+        SYSTEM_PROMPT,
+    )
+    history = []
     for message in messages:
-        role = "model" if isinstance(message, AIMessage) else "user"
-        contents.append({"role": role, "parts": [{"text": str(message.content)}]})
-    return contents
+        if isinstance(message, SystemMessage):
+            continue
+        step_type = "model_output" if isinstance(message, AIMessage) else "user_input"
+        history.append({
+            "type": step_type,
+            "content": [{"type": "text", "text": str(message.content)}],
+        })
+    return system_instruction, history
 
 
 def ask(model_client, model_name: str, messages: list[BaseMessage] | str) -> str:
@@ -62,11 +71,14 @@ def ask(model_client, model_name: str, messages: list[BaseMessage] | str) -> str
         messages = [HumanMessage(content=messages)]
 
     if provider == "gemini":
-        response = model_client.models.generate_content(
+        system_instruction, history = _gemini_interaction_input(messages)
+        response = model_client.interactions.create(
             model=model_name,
-            contents=_gemini_contents(messages),
+            input=history or "",
+            system_instruction=system_instruction,
+            store=False,
         )
-        return response.text
+        return response.output_text
 
     return model_client.invoke(messages).content
 
